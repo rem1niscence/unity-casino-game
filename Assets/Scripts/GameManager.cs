@@ -137,6 +137,7 @@ public class GameManager : MonoBehaviour
         {
             if (cardNum > 51)
                 break;
+            Debug.Log(i);
             deck[i].GetComponent<Card>().CardValue = cards[cardNum]
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
@@ -148,19 +149,6 @@ public class GameManager : MonoBehaviour
 
         }
     }
-
-    /* void CheckPlayerSelected(Decks player)
-    {
-        GameObject[] deck = { };
-        if (player == Decks.PlayerOne)
-            deck = playerOneDeck;
-        else if (player == Decks.PlayerTwo)
-            deck = playerTwoDeck;
-
-        for (int i = 0; i < deck.Length; i++)
-        {
-        }
-    } */
 
     public void SelectPlayerCard(string data)
     {
@@ -180,7 +168,7 @@ public class GameManager : MonoBehaviour
         {
             // To clean all previosuly selected cards so only one card can
             // be selected at a time.
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 4; i++)
             {
                 if (i == cardSelected)
                     continue;
@@ -208,7 +196,16 @@ public class GameManager : MonoBehaviour
                 HightLightCard(card, false);
         } 
     }
-    
+
+    public void SelectBoardCard(int index)
+    {
+        GameObject card = boardDeck[index];
+        bool isSelected = card.GetComponent<Card>().Selected;
+        isSelected = !isSelected;
+        card.GetComponent<Card>().Selected = isSelected;
+        HightLightCard(card, isSelected);
+    }
+
     void HightLightCard(GameObject card, bool hightlight)
     {
         if(hightlight)
