@@ -15,8 +15,9 @@ public class GameManager : MonoBehaviour
     public GameObject[] playerOneDeck;
     public GameObject[] playerTwoDeck;
     public GameObject[] boardDeck;
-    private GameObject POneSelectedCard;
-    private GameObject PTwoSelectedCard;
+    // private GameObject POneSelectedCard;
+    // private GameObject PTwoSelectedCard;
+    private GameObject selectedCard;
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
 
@@ -140,7 +141,7 @@ public class GameManager : MonoBehaviour
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
 
-            if (option == Decks.Board)
+            // if (option == Decks.Board)
                 deck[i].GetComponent<Card>().flipCard();
 
             cardNum++;
@@ -148,7 +149,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    void CheckPlayerSelected(Decks player)
+    /* void CheckPlayerSelected(Decks player)
     {
         GameObject[] deck = { };
         if (player == Decks.PlayerOne)
@@ -159,10 +160,64 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < deck.Length; i++)
         {
         }
-    }
+    } */
 
-    public void SelectPlayerCard(int index)
+    public void SelectPlayerCard(string data)
     {
-        // if (option == 1)
+        // If player == 0 then it's player One consecu and 
+        // accordingly if player == 1 then it's player two.
+        int player = data[0] - '0';
+        // Represent a player card of the deck, ranging from 0 to 3 left to right.
+        int cardSelected = data[1] - '0';
+        GameObject card = null;
+
+        if (player == 0)
+            card = playerOneDeck[cardSelected];
+        else if (player == 1)
+            card = playerTwoDeck[cardSelected];
+
+        if (card.GetComponent<Card>().State != 0)
+        {
+            // To clean all previosuly selected cards so only one card can
+            // be selected at a time.
+            for (int i = 0; i < 3; i++)
+            {
+                if (i == cardSelected)
+                    continue;
+
+                if (player == 0)
+                {
+                    playerOneDeck[i].GetComponent<Card>().Selected = false;
+                    HightLightCard(playerOneDeck[i], false);
+                }
+                else if (player == 1)
+                {
+                    playerTwoDeck[i].GetComponent<Card>().Selected = false;
+                    HightLightCard(playerTwoDeck[i], false);
+                }
+            }
+
+            // So the user is able to unselect the card by clicking again on it.
+            bool isSelected = card.GetComponent<Card>().Selected;
+            isSelected = !isSelected;
+            card.GetComponent<Card>().Selected = isSelected;
+
+            if (isSelected)
+                HightLightCard(card, true);
+            else
+                HightLightCard(card, false);
+        } 
+    }
+    
+    void HightLightCard(GameObject card, bool hightlight)
+    {
+        if(hightlight)
+        {
+            card.GetComponent<Image>().color = new Color(0.8f, 0.8f, 0.8f);
+            Debug.Log(card.GetComponent<Card>().CardValue+1);
+        } else
+        {
+            card.GetComponent<Image>().color = new Color(1f, 1f, 1f);
+        }
     }
 }

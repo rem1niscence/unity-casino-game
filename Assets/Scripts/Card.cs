@@ -19,6 +19,7 @@ public class Card : MonoBehaviour
     private Sprite _cardBack;
     private Sprite _cardFace;
     private Sprite _cardEmpty;
+    private Sprite _cardSelected;
 
 
     private GameObject _manager;
@@ -40,7 +41,7 @@ public class Card : MonoBehaviour
 
     public void flipCard()
     {
-        Debug.Log("Card value: " + (_cardValue + 1));
+        // Debug.Log("Card value: " + (_cardValue + 1));
         if (_state == 0)
             _state = 1;
         else if (_state == 1)
@@ -71,7 +72,7 @@ public class Card : MonoBehaviour
     public bool Selected
     {
         get { return _selected; }
-        set { if (_state == 1) _selected = !_selected; }
+        set { if (_state == 1) _selected = value; }
     }
 
     public bool Initialized
