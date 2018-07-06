@@ -34,6 +34,10 @@ public class GameManager : MonoBehaviour
         {
             CheckCard();
         }
+
+        CheckEmptyDeck(Decks.PlayerOne);
+        CheckEmptyDeck(Decks.PlayerTwo);
+        CheckEmptyDeck(Decks.Board);
     }
 
     void InitializeCards()
@@ -137,7 +141,6 @@ public class GameManager : MonoBehaviour
         {
             if (cardNum > 51)
                 break;
-            Debug.Log(i);
             deck[i].GetComponent<Card>().CardValue = cards[cardNum]
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
@@ -211,10 +214,37 @@ public class GameManager : MonoBehaviour
         if(hightlight)
         {
             card.GetComponent<Image>().color = new Color(0.8f, 0.8f, 0.8f);
-            Debug.Log(card.GetComponent<Card>().CardValue+1);
         } else
         {
             card.GetComponent<Image>().color = new Color(1f, 1f, 1f);
         }
+    }
+
+    public void ClearCard(GameObject card)
+    {
+        card.GetComponent<Card>().CardValue = 0;
+        card.GetComponent<Card>().ShowEmptyCard();
+    }
+
+    void CheckEmptyDeck(Decks option)
+    {
+        GameObject[] deck = { };
+        if (option == Decks.PlayerOne)
+            deck = playerOneDeck;
+        else if (option == Decks.PlayerTwo)
+            deck = playerTwoDeck;
+        else if (option == Decks.Board)
+            deck = boardDeck;
+
+        int emptySlots = 0;
+        for (int i = 0; i < deck.Length; i++)
+        {
+            int cardValue = deck[i].GetComponent<Card>().CardValue;
+            if (cardValue == 0)
+                emptySlots++;
+        }
+        Debug.Log(emptySlots);
+        if (emptySlots == deck.Length)
+            FillDeck(option);
     }
 }
