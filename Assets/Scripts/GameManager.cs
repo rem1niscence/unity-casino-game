@@ -11,15 +11,24 @@ public class GameManager : MonoBehaviour
     public Sprite cardBack;
     public Sprite cardEmpty;
     public GameObject[] cards;
-    public Text matchText;
-    public GameObject[] playerOneDeck;
-    public GameObject[] playerTwoDeck;
-    public GameObject[] boardDeck;
-    // private GameObject POneSelectedCard;
-    // private GameObject PTwoSelectedCard;
+    [SerializeField]
+    private GameObject[] playerOneDeck;
+    [SerializeField]
+    private GameObject[] playerTwoDeck;
+    [SerializeField]
+    private GameObject[] boardDeck;
     private GameObject selectedCard;
 
+    public Text matchText;
+    // public Text pOneScoreText;
+    // public Text pTwoScoreText;
+    // public Text reaminingCards;
+    // public Text turnText;
+    [SerializeField]
+    private Text[] gameTexts;
+
     private enum Decks { PlayerOne, PlayerTwo, Board };
+    private enum InGameText { Match, POneSocre, PTwoScore, RemainingCards, Turn};
 
     private bool _init = false;
     private int _matches = 13;
@@ -213,6 +222,8 @@ public class GameManager : MonoBehaviour
     {
         if(hightlight)
         {
+            string msg = "Card value: " + (card.GetComponent<Card>().CardValue+1);
+            WriteTextOnScreen(InGameText.Match, msg);
             card.GetComponent<Image>().color = new Color(0.8f, 0.8f, 0.8f);
         } else
         {
@@ -243,8 +254,12 @@ public class GameManager : MonoBehaviour
             if (cardValue == 0)
                 emptySlots++;
         }
-        Debug.Log(emptySlots);
         if (emptySlots == deck.Length)
             FillDeck(option);
+    }
+
+    void WriteTextOnScreen(InGameText where, string msg)
+    {
+        gameTexts[(int)where].text = msg;
     }
 }
