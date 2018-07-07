@@ -41,7 +41,6 @@ public class Card : MonoBehaviour
 
     public void flipCard()
     {
-        // Debug.Log("Card value: " + (_cardValue + 1));
         if (_state == 0)
             _state = 1;
         else if (_state == 1)

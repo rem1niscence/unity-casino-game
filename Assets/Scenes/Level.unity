@@ -7560,10 +7560,12 @@ MonoBehaviour:
   - {fileID: 265164554}
   - {fileID: 1055590484}
   matchText: {fileID: 443921324}
-  pOneScoreText: {fileID: 1230942055}
-  pTwoScoreText: {fileID: 783829673}
-  reaminingCards: {fileID: 1570495606}
-  turnText: {fileID: 170278851}
+  gameTexts:
+  - {fileID: 443921324}
+  - {fileID: 1230942055}
+  - {fileID: 783829673}
+  - {fileID: 1570495606}
+  - {fileID: 170278851}
 --- !u!4 &1435116154
 Transform:
   m_ObjectHideFlags: 0

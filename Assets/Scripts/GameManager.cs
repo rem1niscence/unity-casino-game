@@ -20,12 +20,11 @@ public class GameManager : MonoBehaviour
     private GameObject selectedCard;
 
     public Text matchText;
-    // public Text pOneScoreText;
-    // public Text pTwoScoreText;
-    // public Text reaminingCards;
-    // public Text turnText;
     [SerializeField]
     private Text[] gameTexts;
+
+    private int POneScore = 0;
+    private int PTwoScore = 0;
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
     private enum InGameText { Match, POneSocre, PTwoScore, RemainingCards, Turn};
@@ -34,11 +33,22 @@ public class GameManager : MonoBehaviour
     private int _matches = 13;
     private int cardNum = 0;
 
+    // 0 means it's player one turn and 1 means player two turn.
+    private int turn;
+
     // Update is called once per frame
     void Update()
     {
         if (!_init)
+        {
             InitializeCards();
+            turn = Random.Range(0, 2);
+            for (int i = 0; i < 4; i++)
+                if (turn == 0)
+                    playerOneDeck[i].GetComponent<Card>().flipCard();
+                else if (turn == 1)
+                    playerTwoDeck[i].GetComponent<Card>().flipCard();
+        }
         if (Input.GetMouseButtonUp(0))
         {
             CheckCard();
@@ -160,6 +170,10 @@ public class GameManager : MonoBehaviour
             cardNum++;
 
         }
+
+        // To print on the screen how many cards are remaining
+        string cardsLeftTxt = "Cartas restantes: " + (52 - cardNum);
+        WriteTextOnScreen(InGameText.RemainingCards, cardsLeftTxt);
     }
 
     public void SelectPlayerCard(string data)
@@ -222,8 +236,6 @@ public class GameManager : MonoBehaviour
     {
         if(hightlight)
         {
-            string msg = "Card value: " + (card.GetComponent<Card>().CardValue+1);
-            WriteTextOnScreen(InGameText.Match, msg);
             card.GetComponent<Image>().color = new Color(0.8f, 0.8f, 0.8f);
         } else
         {
@@ -261,5 +273,19 @@ public class GameManager : MonoBehaviour
     void WriteTextOnScreen(InGameText where, string msg)
     {
         gameTexts[(int)where].text = msg;
+    }
+
+    void ChangeTurn()
+    {
+        if (turn == 1)
+            turn = 0;   
+        else if (turn == 0)
+            turn = 1;
+
+        for (int i = 0; i < 4; i++)
+        {
+            playerOneDeck[i].GetComponent<Card>().flipCard();
+            playerTwoDeck[i].GetComponent<Card>().flipCard();
+        }
     }
 }
