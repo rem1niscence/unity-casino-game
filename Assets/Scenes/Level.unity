@@ -299,7 +299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &63303708
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -696,7 +696,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &117843029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1735,7 +1735,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &265164557
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2806,7 +2806,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '""'
+  m_Text: 
 --- !u!222 &443921325
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3075,7 +3075,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &497462176
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3296,7 +3296,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &529514145
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4556,7 +4556,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &737102230
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5899,7 +5899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &1029168868
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6035,7 +6035,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &1055590487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7879,7 +7879,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &1528350906
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8695,7 +8695,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1673752071}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1435116153}
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1673752071
@@ -10369,7 +10380,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1898127191}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1435116153}
+        m_MethodName: Place
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
 --- !u!114 &1898127191
@@ -10886,7 +10908,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _state: 0
   _initialized: 0
-  _cardValue: 0
+  _cardValue: -1
 --- !u!114 &2093801168
 MonoBehaviour:
   m_ObjectHideFlags: 0

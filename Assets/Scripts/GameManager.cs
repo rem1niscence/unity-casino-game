@@ -27,10 +27,9 @@ public class GameManager : MonoBehaviour
     private int PTwoScore = 0;
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
-    private enum InGameText { Match, POneScore, PTwoScore, RemainingCards, Turn};
+    private enum InGameText { Match, POneScore, PTwoScore, RemainingCards, Turn };
 
     private bool _init = false;
-    private int _matches = 13;
     private int cardNum = 0;
 
     // 0 means it's player one turn and 1 means player two turn.
@@ -61,9 +60,9 @@ public class GameManager : MonoBehaviour
             turn = Random.Range(0, 2);
             for (int i = 0; i < 4; i++)
                 if (turn == 0)
-                    playerTwoDeck[i].GetComponent<Card>().flipCard();
-                else if (turn == 1)
                     playerOneDeck[i].GetComponent<Card>().flipCard();
+                else if (turn == 1)
+                    playerTwoDeck[i].GetComponent<Card>().flipCard();
         }
 
         CheckEmptyDeck(Decks.PlayerOne);
@@ -138,14 +137,14 @@ public class GameManager : MonoBehaviour
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
 
-           if (option == Decks.Board)
+            if (option == Decks.Board)
                 deck[i].GetComponent<Card>().flipCard();
 
-           // Honestly I don't actually comprenhend what this does
-           // but it fixes the bug in which when spawning new cards
-           // they don't appear flipped for the opponent
-           if (turn == 1 && option == Decks.PlayerOne)
-               playerOneDeck[i].GetComponent<Card>().flipCard();
+            // Honestly I don't actually comprenhend what this does
+            // but it fixes the bug in which when spawning new cards
+            // they don't appear flipped for the opponent
+            if (turn == 1 && option == Decks.PlayerOne)
+                playerOneDeck[i].GetComponent<Card>().flipCard();
 
             cardNum++;
 
@@ -206,7 +205,7 @@ public class GameManager : MonoBehaviour
                 selectedCard = null;
                 HightLightCard(card, false);
             }
-        } 
+        }
     }
 
     public void SelectBoardCard(int index)
@@ -220,10 +219,11 @@ public class GameManager : MonoBehaviour
 
     void HightLightCard(GameObject card, bool hightlight)
     {
-        if(hightlight)
+        if (hightlight)
         {
             card.GetComponent<Image>().color = new Color(0.8f, 0.8f, 0.8f);
-        } else
+        }
+        else
         {
             card.GetComponent<Image>().color = new Color(1f, 1f, 1f);
         }
@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviour
     {
         selectedCard = null;
         if (turn == 1)
-            turn = 0;   
+            turn = 0;
         else if (turn == 0)
             turn = 1;
 
@@ -285,7 +285,7 @@ public class GameManager : MonoBehaviour
     {
         int sum = 0;
         List<GameObject> cards = SelectedCards;
-        foreach(GameObject card in cards)
+        foreach (GameObject card in cards)
         {
             sum += card.GetComponent<Card>().CardValue;
             sum++;
@@ -293,9 +293,8 @@ public class GameManager : MonoBehaviour
 
         if (selectedCard != null)
         {
-            if ((selectedCard.GetComponent<Card>().CardValue+1) == sum)
+            if ((selectedCard.GetComponent<Card>().CardValue + 1) == sum)
             {
-                POneScore += cards.Count;
                 ClearCard(selectedCard);
                 selectedCard = null;
                 foreach (GameObject card in cards)
@@ -304,19 +303,26 @@ public class GameManager : MonoBehaviour
                 }
                 if (turn == 0)
                 {
+                    POneScore += cards.Count;
                     string msg = "Jugad@r 1: " + POneScore + " puntos";
                     WriteTextOnScreen(InGameText.POneScore, msg);
-                } else if (turn == 1) {
-                    string msg = "Jugad@r 2: " + PTwoScore + " puntos";
-                    WriteTextOnScreen(InGameText.POneScore, msg);
                 }
+                else if (turn == 1)
+                {
+                    PTwoScore += cards.Count;
+                    string msg = "Jugad@r 2: " + PTwoScore + " puntos";
+                    WriteTextOnScreen(InGameText.PTwoScore, msg);
+                }
+                WriteTextOnScreen(InGameText.Match, "");
                 ChangeTurn();
-            } else
+            }
+            else
             {
                 string msg = "Las cartas no suman lo mismo";
                 WriteTextOnScreen(InGameText.Match, msg);
             }
-        } else
+        }
+        else
         {
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
@@ -327,9 +333,8 @@ public class GameManager : MonoBehaviour
     {
         if (selectedCard != null)
         {
-            Debug.Log(boardDeck[9].GetComponent<Card>().Initialized);
             int i = 0;
-            for ( ; i < 10; i++)
+            for (; i < 10; i++)
             {
                 if (boardDeck[i].GetComponent<Card>().CardValue < 0)
                     break;
@@ -343,7 +348,8 @@ public class GameManager : MonoBehaviour
             ClearCard(selectedCard);
             selectedCard = null;
             ChangeTurn();
-        } else
+        }
+        else
         {
 
         }
