@@ -141,12 +141,6 @@ public class GameManager : MonoBehaviour
             if (option == Decks.Board)
                 deck[i].GetComponent<Card>().flipCard();
 
-            // Honestly I don't actually comprenhend what this does
-            // but it fixes the bug in which when spawning new cards
-            // they don't appear flipped for the opponent
-            // if (turn == 1 && option == Decks.PlayerOne)
-            //    playerOneDeck[i].GetComponent<Card>().flipCard();
-
             cardNum++;
 
         }
@@ -236,8 +230,10 @@ public class GameManager : MonoBehaviour
         isSelected = !isSelected;
         card.GetComponent<Card>().Selected = isSelected;
         HightLightCard(card, isSelected);
-        WriteTextOnScreen(InGameText.CardValue, "Valor de la carta: " + 
-            (card.GetComponent<Card>().CardValue + 1));
+        string msg = string.Format("Valor de la carta: {0} \nCantidad de cartas: {1}", 
+            card.GetComponent<Card>().CardValue + 1,
+            card.GetComponent<Card>().Quantity);
+        WriteTextOnScreen(InGameText.CardValue, msg);
     }
 
     void HightLightCard(GameObject card, bool hightlight)
@@ -381,7 +377,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void Build()
+    public void BuildComb()
     {
         List<GameObject> cards = SelectedCards;
         if (selectedCard != null)
@@ -391,18 +387,18 @@ public class GameManager : MonoBehaviour
                 int sum = cards[0].GetComponent<Card>().CardValue +
                     selectedCard.GetComponent<Card>().CardValue + 2;
                 GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
-                bool canBuild = false;
+                bool canCall = false;
                 for (int i = 0; i < 4; i++)
                 {
                     
                     if (deck[i].GetComponent<Card>().CardValue+1 == sum)
                     {
-                        canBuild = true;
+                        canCall = true;
                         break;
                     }
                 }
 
-                if (canBuild)
+                if (canCall)
                 {
                     cards[0].GetComponent<Card>().CardValue = sum-1;
                     cards[0].GetComponent<Card>().Quantity++;
@@ -420,6 +416,51 @@ public class GameManager : MonoBehaviour
             {
                 WriteTextOnScreen(InGameText.Match,
                     "Solo puedes seleccionar una carta del tablero para construir");
+            }
+        } else
+        {
+            WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
+        }
+    }
+
+    public void CallComb() {
+        List<GameObject> cards = SelectedCards;
+        if (selectedCard != null)
+        {
+            if (cards.Count == 1)
+            {
+                GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
+                bool canCall = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    
+                    if (deck[i].GetComponent<Card>().CardValue == 
+                    cards[0].GetComponent<Card>().CardValue)
+                    {
+                        canCall = true;
+                        break;
+                    }
+                }
+
+                if (canCall)
+                {
+                    
+                    cards[0].GetComponent<Card>().Quantity++;
+                    string msg = "Llamando " + (selectedCard.GetComponent<Card>()
+                    .CardValue+1);
+                    WriteTextOnScreen(InGameText.Match, msg);
+                    ClearCard(selectedCard);
+                    selectedCard = null;
+                    ChangeTurn();
+                } else
+                {
+                    WriteTextOnScreen(InGameText.Match, "Llamada no posible");
+                }
+            }
+            else
+            {
+                WriteTextOnScreen(InGameText.Match,
+                    "Solo puedes seleccionar una carta del tablero para Llamar");
             }
         } else
         {
