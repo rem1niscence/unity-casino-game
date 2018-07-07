@@ -144,11 +144,31 @@ public class GameManager : MonoBehaviour
             // Honestly I don't actually comprenhend what this does
             // but it fixes the bug in which when spawning new cards
             // they don't appear flipped for the opponent
-            if (turn == 1 && option == Decks.PlayerOne)
-                playerOneDeck[i].GetComponent<Card>().flipCard();
+            // if (turn == 1 && option == Decks.PlayerOne)
+            //    playerOneDeck[i].GetComponent<Card>().flipCard();
 
             cardNum++;
 
+        }
+
+        // All of this is to prevent a bug when a next turn occurs after 
+        // a player card has ran out, the board appears with all cards facing upwards.
+        int upsideCards = 0;
+        for (int i = 0; i < 4; i++)
+        {
+            if (playerOneDeck[i].GetComponent<Card>().State == 1)
+                upsideCards++;
+            if (playerTwoDeck[i].GetComponent<Card>().State == 1)
+                upsideCards++;
+        }
+
+        if (upsideCards == 8)
+        {
+            deck = (turn == 0) ? playerTwoDeck : playerOneDeck;
+            for (int i = 0; i < 4; i++)
+            {
+                deck[i].GetComponent<Card>().flipCard();
+            }
         }
 
         // To print on the screen how many cards are remaining
@@ -354,7 +374,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
-
+            WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }
 
@@ -368,14 +388,12 @@ public class GameManager : MonoBehaviour
                 int sum = cards[0].GetComponent<Card>().CardValue +
                     selectedCard.GetComponent<Card>().CardValue + 2;
                 GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
-                Debug.Log("Sum: " + sum);
                 bool canBuild = false;
                 for (int i = 0; i < 4; i++)
                 {
                     
                     if (deck[i].GetComponent<Card>().CardValue+1 == sum)
                     {
-                        Debug.Log("Value: " + (deck[i].GetComponent<Card>().CardValue + 1));
                         canBuild = true;
                         break;
                     }
