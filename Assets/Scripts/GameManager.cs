@@ -145,8 +145,8 @@ public class GameManager : MonoBehaviour
 
         }
 
-        // All of this is to prevent a bug when a next turn occurs after 
-        // a player card has ran out, the board appears with all cards facing upwards.
+        // All of this is to prevent a bug when a next turn occurs after a 
+        // player card has ran out, the board appears with all cards facing upwards.
         int upsideCards = 0;
         for (int i = 0; i < 4; i++)
         {
@@ -230,7 +230,8 @@ public class GameManager : MonoBehaviour
         isSelected = !isSelected;
         card.GetComponent<Card>().Selected = isSelected;
         HightLightCard(card, isSelected);
-        string msg = string.Format("Valor de la carta: {0} \nCantidad de cartas: {1}", 
+        string msg = string.Format("Valor de la carta: {0}" + 
+        "\nCantidad de cartas: {1}", 
             card.GetComponent<Card>().CardValue + 1,
             card.GetComponent<Card>().Quantity);
         WriteTextOnScreen(InGameText.CardValue, msg);
@@ -386,7 +387,8 @@ public class GameManager : MonoBehaviour
             {
                 int sum = cards[0].GetComponent<Card>().CardValue +
                     selectedCard.GetComponent<Card>().CardValue + 2;
-                GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
+                GameObject[] deck = (turn == 0) ? playerOneDeck : 
+                playerTwoDeck;
                 bool canCall = false;
                 for (int i = 0; i < 4; i++)
                 {

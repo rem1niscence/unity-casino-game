@@ -5,17 +5,30 @@ using UnityEngine.SceneManagement;
 
 public class MenuBehavior : MonoBehaviour {
 
-	public void triggerMenuBehavior(int i)
-    {
-        switch(i)
-        {
-            default:
-            case (0):
-                SceneManager.LoadScene("Level");
-                break;
-            case (1):
-                Application.Quit();
-                break;
+    public static bool gameIsPaused = false;
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            if (gameIsPaused) {
+                Resume();
+            } else {
+                Pause();
+            }
         }
+    }
+    public void StartGame() {
+        SceneManager.LoadScene("Level");
+    }
+
+    public void Quit() {
+        Application.Quit();
+    }
+
+    void Resume() {
+
+    }
+
+    void Pause() {
+
     }
 }
