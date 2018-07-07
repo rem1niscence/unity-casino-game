@@ -19,7 +19,6 @@ public class GameManager : MonoBehaviour
     private GameObject[] boardDeck;
     private GameObject selectedCard;
 
-    public Text matchText;
     [SerializeField]
     private Text[] gameTexts;
 
@@ -27,7 +26,8 @@ public class GameManager : MonoBehaviour
     private int PTwoScore = 0;
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
-    private enum InGameText { Match, POneScore, PTwoScore, RemainingCards, Turn };
+    private enum InGameText { Match, POneScore, PTwoScore, RemainingCards,
+        Turn, CardValue };
 
     private bool _init = false;
     private int cardNum = 0;
@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
         get
         {
             List<GameObject> selectedBoardCards = new List<GameObject>();
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < boardDeck.Length; i++)
             {
                 if (boardDeck[i].GetComponent<Card>().Selected)
                     selectedBoardCards.Add(boardDeck[i]);
@@ -63,6 +63,7 @@ public class GameManager : MonoBehaviour
                     playerOneDeck[i].GetComponent<Card>().flipCard();
                 else if (turn == 1)
                     playerTwoDeck[i].GetComponent<Card>().flipCard();
+            WriteTextOnScreen(InGameText.Turn, "Turno de: Jugador " + (turn + 1));
         }
 
         CheckEmptyDeck(Decks.PlayerOne);
@@ -215,6 +216,8 @@ public class GameManager : MonoBehaviour
         isSelected = !isSelected;
         card.GetComponent<Card>().Selected = isSelected;
         HightLightCard(card, isSelected);
+        WriteTextOnScreen(InGameText.CardValue, "Valor de la carta: " + 
+            (card.GetComponent<Card>().CardValue + 1));
     }
 
     void HightLightCard(GameObject card, bool hightlight)
@@ -318,7 +321,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
-                string msg = "Las cartas no suman lo mismo";
+                string msg = "No suman lo mismo";
                 WriteTextOnScreen(InGameText.Match, msg);
             }
         }
@@ -334,7 +337,7 @@ public class GameManager : MonoBehaviour
         if (selectedCard != null)
         {
             int i = 0;
-            for (; i < 10; i++)
+            for (; i < boardDeck.Length; i++)
             {
                 if (boardDeck[i].GetComponent<Card>().CardValue < 0)
                     break;
@@ -352,6 +355,53 @@ public class GameManager : MonoBehaviour
         else
         {
 
+        }
+    }
+
+    public void Build()
+    {
+        List<GameObject> cards = SelectedCards;
+        if (selectedCard != null)
+        {
+            if (cards.Count == 1)
+            {
+                int sum = cards[0].GetComponent<Card>().CardValue +
+                    selectedCard.GetComponent<Card>().CardValue + 2;
+                GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
+                Debug.Log("Sum: " + sum);
+                bool canBuild = false;
+                for (int i = 0; i < 4; i++)
+                {
+                    
+                    if (deck[i].GetComponent<Card>().CardValue+1 == sum)
+                    {
+                        Debug.Log("Value: " + (deck[i].GetComponent<Card>().CardValue + 1));
+                        canBuild = true;
+                        break;
+                    }
+                }
+
+                if (canBuild)
+                {
+                    cards[0].GetComponent<Card>().CardValue = sum-1;
+                    ClearCard(selectedCard);
+                    selectedCard = null;
+                    string msg = "Contruyendo " + sum;
+                    WriteTextOnScreen(InGameText.Match, msg);
+                    ChangeTurn();
+                } else
+                {
+                    WriteTextOnScreen(InGameText.Match, "Construccion no posible");
+                }
+            }
+            else
+            {
+                WriteTextOnScreen(InGameText.Match,
+                    "Solo puedes seleccionar una carta del tablero para construir");
+            }
+        } else
+        {
+            WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }
 }
