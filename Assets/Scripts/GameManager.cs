@@ -27,7 +27,7 @@ public class GameManager : MonoBehaviour
     private int PTwoScore = 0;
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
-    private enum InGameText { Match, POneSocre, PTwoScore, RemainingCards, Turn};
+    private enum InGameText { Match, POneScore, PTwoScore, RemainingCards, Turn};
 
     private bool _init = false;
     private int _matches = 13;
@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
             List<GameObject> selectedBoardCards = new List<GameObject>();
             for (int i = 0; i < 10; i++)
             {
-                if (boardDeck[i].GetComponent<Card>().CardValue > 0)
+                if (boardDeck[i].GetComponent<Card>().Selected)
                     selectedBoardCards.Add(boardDeck[i]);
             }
 
@@ -58,12 +58,12 @@ public class GameManager : MonoBehaviour
         if (!_init)
         {
             InitializeCards();
-            turn = Random.Range(0, 2);
+            turn = 0; // Random.Range(0, 2);
             for (int i = 0; i < 4; i++)
                 if (turn == 0)
-                    playerOneDeck[i].GetComponent<Card>().flipCard();
-                else if (turn == 1)
                     playerTwoDeck[i].GetComponent<Card>().flipCard();
+                else if (turn == 1)
+                    playerOneDeck[i].GetComponent<Card>().flipCard();
         }
         if (Input.GetMouseButtonUp(0))
         {
@@ -233,9 +233,15 @@ public class GameManager : MonoBehaviour
             card.GetComponent<Card>().Selected = isSelected;
 
             if (isSelected)
+            {
+                selectedCard = card;
                 HightLightCard(card, true);
+            }
             else
+            {
+                selectedCard = null;
                 HightLightCard(card, false);
+            }
         } 
     }
 
@@ -262,6 +268,7 @@ public class GameManager : MonoBehaviour
     public void ClearCard(GameObject card)
     {
         card.GetComponent<Card>().CardValue = 0;
+        card.GetComponent<Card>().Selected = false;
         card.GetComponent<Card>().ShowEmptyCard();
     }
 
@@ -308,8 +315,43 @@ public class GameManager : MonoBehaviour
 
     public void Play()
     {
-        
-        
+        int sum = 0;
+        List<GameObject> cards = SelectedCards;
+        foreach(GameObject card in cards)
+        {
+            sum += card.GetComponent<Card>().CardValue;
+            sum++;
+        }
+
+        if (selectedCard != null)
+        {
+            if ((selectedCard.GetComponent<Card>().CardValue+1) == sum)
+            {
+                POneScore += cards.Count;
+                ClearCard(selectedCard);
+                selectedCard = null;
+                foreach (GameObject card in cards)
+                {
+                    ClearCard(card);
+                }
+                if (turn == 0)
+                {
+                    string msg = "Jugad@r 1: " + POneScore + " puntos";
+                    WriteTextOnScreen(InGameText.POneScore, msg);
+                } else if (turn == 1) {
+                    string msg = "Jugad@r 2: " + PTwoScore + " puntos";
+                    WriteTextOnScreen(InGameText.POneScore, msg);
+                }
+                ChangeTurn();
+            } else
+            {
+                string msg = "Las cartas no suman lo mismo";
+                WriteTextOnScreen(InGameText.Match, msg);
+            }
+        } else
+        {
+            WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
+        }
     }
 
     
