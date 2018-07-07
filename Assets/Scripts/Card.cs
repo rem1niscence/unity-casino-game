@@ -14,6 +14,7 @@ public class Card : MonoBehaviour
     private bool _initialized = false;
     [SerializeField]
     private int _cardValue;
+    private int _cardQuantity = 1;
     private bool _selected = false;
 
     private Sprite _cardBack;
@@ -86,6 +87,12 @@ public class Card : MonoBehaviour
     public void falseCheck()
     {
         StartCoroutine(pause());
+    }
+
+    public int Quantity
+    {
+        get { return _cardQuantity; }
+        set { _cardQuantity = value; }
     }
 
     IEnumerator pause()

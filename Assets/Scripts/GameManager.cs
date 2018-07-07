@@ -257,6 +257,7 @@ public class GameManager : MonoBehaviour
         card.GetComponent<Card>().CardValue = -1;
         card.GetComponent<Card>().Selected = false;
         card.GetComponent<Card>().Initialized = false;
+        card.GetComponent<Card>().Quantity = 1;
         card.GetComponent<Card>().ShowEmptyCard();
         HightLightCard(card, false);
     }
@@ -320,19 +321,21 @@ public class GameManager : MonoBehaviour
             {
                 ClearCard(selectedCard);
                 selectedCard = null;
+                int points = 0;
                 foreach (GameObject card in cards)
                 {
+                    points += card.GetComponent<Card>().Quantity;
                     ClearCard(card);
                 }
                 if (turn == 0)
                 {
-                    POneScore += cards.Count;
+                    POneScore += points;
                     string msg = "Jugad@r 1: " + POneScore + " puntos";
                     WriteTextOnScreen(InGameText.POneScore, msg);
                 }
                 else if (turn == 1)
                 {
-                    PTwoScore += cards.Count;
+                    PTwoScore += points;
                     string msg = "Jugad@r 2: " + PTwoScore + " puntos";
                     WriteTextOnScreen(InGameText.PTwoScore, msg);
                 }
@@ -402,6 +405,7 @@ public class GameManager : MonoBehaviour
                 if (canBuild)
                 {
                     cards[0].GetComponent<Card>().CardValue = sum-1;
+                    cards[0].GetComponent<Card>().Quantity++;
                     ClearCard(selectedCard);
                     selectedCard = null;
                     string msg = "Contruyendo " + sum;
