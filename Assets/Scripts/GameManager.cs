@@ -65,10 +65,6 @@ public class GameManager : MonoBehaviour
                 else if (turn == 1)
                     playerOneDeck[i].GetComponent<Card>().flipCard();
         }
-        if (Input.GetMouseButtonUp(0))
-        {
-            CheckCard();
-        }
 
         CheckEmptyDeck(Decks.PlayerOne);
         CheckEmptyDeck(Decks.PlayerTwo);
@@ -121,44 +117,6 @@ public class GameManager : MonoBehaviour
     public Sprite getCardFace(int i)
     {
         return cardFace[i];
-    }
-
-    void CheckCard()
-    {
-        List<int> c = new List<int>();
-        for (int i = 0; i < cards.Length; i++)
-        {
-            if (cards[i].GetComponent<Card>().State == 1)
-            {
-                c.Add(i);
-            }
-        }
-
-        if (c.Count == 2)
-        {
-            CardComparison(c);
-        }
-    }
-
-    void CardComparison(List<int> c)
-    {
-        Card.DO_NOT = true;
-        int x = 0;
-        if (cards[c[0]].GetComponent<Card>().CardValue ==
-            cards[c[1]].GetComponent<Card>().CardValue)
-        {
-            x = 2;
-            _matches--;
-            matchText.text = "Number of Matches: " + _matches;
-            if (_matches == 0)
-                SceneManager.LoadScene("Menu");
-        }
-
-        for (int i = 0; i < c.Count; i++)
-        {
-            cards[c[i]].GetComponent<Card>().State = x;
-            cards[c[i]].GetComponent<Card>().falseCheck();
-        }
     }
 
     void FillDeck(Decks option)
@@ -267,9 +225,11 @@ public class GameManager : MonoBehaviour
 
     public void ClearCard(GameObject card)
     {
-        card.GetComponent<Card>().CardValue = 0;
+        card.GetComponent<Card>().CardValue = -1;
         card.GetComponent<Card>().Selected = false;
+        card.GetComponent<Card>().Initialized = false;
         card.GetComponent<Card>().ShowEmptyCard();
+        HightLightCard(card, false);
     }
 
     void CheckEmptyDeck(Decks option)
@@ -286,7 +246,7 @@ public class GameManager : MonoBehaviour
         for (int i = 0; i < deck.Length; i++)
         {
             int cardValue = deck[i].GetComponent<Card>().CardValue;
-            if (cardValue == 0)
+            if (cardValue < 0)
                 emptySlots++;
         }
         if (emptySlots == deck.Length)
@@ -313,6 +273,8 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Plays the normal game, check if sum of the selected cards on the board
+    // is equal to the seletec card.
     public void Play()
     {
         int sum = 0;
@@ -354,5 +316,30 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    
+    // Place a selected card on the board
+    public void Place()
+    {
+        if (selectedCard != null)
+        {
+            Debug.Log(boardDeck[9].GetComponent<Card>().Initialized);
+            int i = 0;
+            for ( ; i < 10; i++)
+            {
+                if (boardDeck[i].GetComponent<Card>().CardValue < 0)
+                    break;
+            }
+            boardDeck[i].GetComponent<Card>().CardValue =
+                selectedCard.GetComponent<Card>().CardValue;
+            boardDeck[i].GetComponent<Card>().Initialized = true;
+            boardDeck[i].GetComponent<Card>().setupGraphics();
+            boardDeck[i].GetComponent<Card>().flipCard();
+
+            ClearCard(selectedCard);
+            selectedCard = null;
+            ChangeTurn();
+        } else
+        {
+
+        }
+    }
 }
