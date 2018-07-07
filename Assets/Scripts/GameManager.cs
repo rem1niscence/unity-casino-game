@@ -58,7 +58,7 @@ public class GameManager : MonoBehaviour
         if (!_init)
         {
             InitializeCards();
-            turn = 0; // Random.Range(0, 2);
+            turn = Random.Range(0, 2);
             for (int i = 0; i < 4; i++)
                 if (turn == 0)
                     playerTwoDeck[i].GetComponent<Card>().flipCard();
@@ -138,8 +138,14 @@ public class GameManager : MonoBehaviour
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
 
-            // if (option == Decks.Board)
+           if (option == Decks.Board)
                 deck[i].GetComponent<Card>().flipCard();
+
+           // Honestly I don't actually comprenhend what this does
+           // but it fixes the bug in which when spawning new cards
+           // they don't appear flipped for the opponent
+           if (turn == 1 && option == Decks.PlayerOne)
+               playerOneDeck[i].GetComponent<Card>().flipCard();
 
             cardNum++;
 
