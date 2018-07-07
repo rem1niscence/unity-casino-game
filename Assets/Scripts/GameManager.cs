@@ -36,6 +36,22 @@ public class GameManager : MonoBehaviour
     // 0 means it's player one turn and 1 means player two turn.
     private int turn;
 
+    // Get a reference of all the selectedCards on the board
+    public List<GameObject> SelectedCards
+    {
+        get
+        {
+            List<GameObject> selectedBoardCards = new List<GameObject>();
+            for (int i = 0; i < 10; i++)
+            {
+                if (boardDeck[i].GetComponent<Card>().CardValue > 0)
+                    selectedBoardCards.Add(boardDeck[i]);
+            }
+
+            return selectedBoardCards;
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -275,8 +291,9 @@ public class GameManager : MonoBehaviour
         gameTexts[(int)where].text = msg;
     }
 
-    void ChangeTurn()
+    public void ChangeTurn()
     {
+        selectedCard = null;
         if (turn == 1)
             turn = 0;   
         else if (turn == 0)
@@ -288,4 +305,12 @@ public class GameManager : MonoBehaviour
             playerTwoDeck[i].GetComponent<Card>().flipCard();
         }
     }
+
+    public void Play()
+    {
+        
+        
+    }
+
+    
 }
