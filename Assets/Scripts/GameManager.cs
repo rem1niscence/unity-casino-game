@@ -32,6 +32,7 @@ public class GameManager : MonoBehaviour
 
     private bool _init = false;
     private bool checkForEndGame = false;
+    private bool gameOver = false;
     private int cardNum = 0;
 
     // 0 means it's player one turn and 1 means player two turn.
@@ -68,12 +69,14 @@ public class GameManager : MonoBehaviour
             WriteTextOnScreen(InGameText.Turn, "Turno de: Jugador " + (turn + 1));
         }
         
-        if (checkForEndGame) {
-            EndGame();
-        } else {
-            CheckEmptyDeck(Decks.PlayerOne);
-            CheckEmptyDeck(Decks.PlayerTwo);
-            CheckEmptyDeck(Decks.Board);
+        if (!gameOver) {
+            if (checkForEndGame) {
+                EndGame();
+            } else {
+                CheckEmptyDeck(Decks.PlayerOne);
+                CheckEmptyDeck(Decks.PlayerTwo);
+                CheckEmptyDeck(Decks.Board);
+            }
         }
     }
 
@@ -509,7 +512,7 @@ public class GameManager : MonoBehaviour
                 winner = "EMPATE!";
             
             WriteTextOnScreen(InGameText.Winner, winner);
-            checkForEndGame = false;
+            gameOver = true;
             endGamePanel.SetActive(true);
         }
     }
