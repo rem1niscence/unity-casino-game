@@ -382,6 +382,7 @@ public class GameManager : MonoBehaviour
             boardDeck[i].GetComponent<Card>().CardValue =
                 selectedCard.GetComponent<Card>().CardValue;
             boardDeck[i].GetComponent<Card>().Initialized = true;
+            boardDeck[i].GetComponent<Card>().ID = selectedCard.GetComponent<Card>().ID;
             boardDeck[i].GetComponent<Card>().setupGraphics();
             boardDeck[i].GetComponent<Card>().flipCard();
 
