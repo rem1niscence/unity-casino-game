@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     private GameObject[] boardDeck;
     private GameObject selectedCard;
+    public GameObject endGamePanel;
 
     [SerializeField]
     private Text[] gameTexts;
@@ -27,9 +28,10 @@ public class GameManager : MonoBehaviour
 
     private enum Decks { PlayerOne, PlayerTwo, Board };
     private enum InGameText { Match, POneScore, PTwoScore, RemainingCards,
-        Turn, CardValue };
+        Turn, CardValue, Winner };
 
     private bool _init = false;
+    private bool checkForEndGame = false;
     private int cardNum = 0;
 
     // 0 means it's player one turn and 1 means player two turn.
@@ -65,10 +67,14 @@ public class GameManager : MonoBehaviour
                     playerTwoDeck[i].GetComponent<Card>().flipCard();
             WriteTextOnScreen(InGameText.Turn, "Turno de: Jugador " + (turn + 1));
         }
-
-        CheckEmptyDeck(Decks.PlayerOne);
-        CheckEmptyDeck(Decks.PlayerTwo);
-        CheckEmptyDeck(Decks.Board);
+        
+        if (checkForEndGame) {
+            EndGame();
+        } else {
+            CheckEmptyDeck(Decks.PlayerOne);
+            CheckEmptyDeck(Decks.PlayerTwo);
+            CheckEmptyDeck(Decks.Board);
+        }
     }
 
     void InitializeCards()
@@ -132,8 +138,10 @@ public class GameManager : MonoBehaviour
 
         for (int i = 0; i < 4; i++)
         {
-            if (cardNum > 51)
+            if (cardNum > 51) {
+                checkForEndGame = true;
                 break;
+            }
             deck[i].GetComponent<Card>().CardValue = cards[cardNum]
                 .GetComponent<Card>().CardValue;
             deck[i].GetComponent<Card>().setupGraphics();
@@ -467,6 +475,42 @@ public class GameManager : MonoBehaviour
         } else
         {
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
+        }
+    }
+
+    void EndGame() {
+        
+        int pOneCardsLeft = 4;
+        int pOTwoCardsLeft = 4;
+        for (int i = 0; i < 4; i++) {
+            if (playerOneDeck[i].GetComponent<Card>().CardValue < 0)
+                pOneCardsLeft--;
+            if (playerTwoDeck[i].GetComponent<Card>().CardValue < 0)
+                pOTwoCardsLeft--;
+        }
+        if (pOneCardsLeft == 0 && pOTwoCardsLeft == 0) {
+            int remainingPoints = 0;
+            for (int i = 0; i < boardDeck.Length; i++) 
+                if (boardDeck[i].GetComponent<Card>().Initialized)
+                    remainingPoints += 
+                        boardDeck[i].GetComponent<Card>().Quantity;
+            
+            if (turn == 1) 
+                POneScore += remainingPoints;
+            else if (turn == 0)
+                PTwoScore += remainingPoints;
+            
+            string winner = "";
+            if (POneScore > PTwoScore) 
+                winner = "JUGAD@R 1 HA GANADO CON " + POneScore + " PUNTOS!";
+            else if (POneScore < PTwoScore) 
+                winner = "JUGAD@R 2 HA GANADO CON " + PTwoScore + " PUNTOS!";
+            else if (POneScore == PTwoScore) 
+                winner = "EMPATE!";
+            
+            WriteTextOnScreen(InGameText.Winner, winner);
+            checkForEndGame = false;
+            endGamePanel.SetActive(true);
         }
     }
 }
