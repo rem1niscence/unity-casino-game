@@ -7,6 +7,7 @@ public class MenuBehavior : MonoBehaviour {
 
     public static bool gameIsPaused = false;
     public GameObject pauseMenuUI;
+    public GameObject tutorialUI;
 
     void Update() {
         Scene scene = SceneManager.GetActiveScene();
@@ -36,5 +37,13 @@ public class MenuBehavior : MonoBehaviour {
     public void Pause() {
         pauseMenuUI.SetActive(true);
         gameIsPaused = true;
+    }
+
+    public void ShowTutorial(bool show) {
+        if (show) {
+            tutorialUI.SetActive(true);
+        } else {
+            tutorialUI.SetActive(false);
+        }
     }
 }

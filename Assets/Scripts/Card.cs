@@ -35,7 +35,6 @@ public class Card : MonoBehaviour
     public void setupGraphics()
     {
         _cardBack = _manager.GetComponent<GameManager>().getCardBack();
-        Debug.Log(_id);
         _cardFace = _manager.GetComponent<GameManager>().getCardFace(_id);
         _cardEmpty = _manager.GetComponent<GameManager>().getCardEmpty();
 

@@ -98,7 +98,6 @@ public class GameManager : MonoBehaviour
                 }
                 cards[choice].GetComponent<Card>().CardValue = id;
                 cards[choice].GetComponent<Card>().Initialized = true;
-                // Debug.Log(id+(13*i));
                 cards[choice].GetComponent<Card>().ID = id+(13*i);
             }
         }
