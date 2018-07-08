@@ -46,4 +46,8 @@ public class MenuBehavior : MonoBehaviour {
             tutorialUI.SetActive(false);
         }
     }
+
+    public void LoadMenu() {
+        SceneManager.LoadScene("Menu");
+    }
 }
