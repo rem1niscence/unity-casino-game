@@ -98,13 +98,14 @@ public class GameManager : MonoBehaviour
                 }
                 cards[choice].GetComponent<Card>().CardValue = id;
                 cards[choice].GetComponent<Card>().Initialized = true;
+                // Debug.Log(id+(13*i));
+                cards[choice].GetComponent<Card>().ID = id+(13*i);
             }
         }
 
         foreach (GameObject c in cards)
         {
             c.GetComponent<Card>().setupGraphics();
-
             if (!_init)
             {
                 _init = true;
@@ -150,6 +151,8 @@ public class GameManager : MonoBehaviour
             }
             deck[i].GetComponent<Card>().CardValue = cards[cardNum]
                 .GetComponent<Card>().CardValue;
+            deck[i].GetComponent<Card>().ID = cards[cardNum]
+                .GetComponent<Card>().ID;
             deck[i].GetComponent<Card>().setupGraphics();
 
             if (option == Decks.Board)

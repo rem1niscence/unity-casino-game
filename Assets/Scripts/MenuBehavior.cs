@@ -9,11 +9,14 @@ public class MenuBehavior : MonoBehaviour {
     public GameObject pauseMenuUI;
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (gameIsPaused) {
-                Resume();
-            } else {
-                Pause();
+        Scene scene = SceneManager.GetActiveScene();
+        if (scene.name == "Level") {
+            if (Input.GetKeyDown(KeyCode.Escape)) {
+                if (gameIsPaused) {
+                    Resume();
+                } else {
+                    Pause();
+                }
             }
         }
     }

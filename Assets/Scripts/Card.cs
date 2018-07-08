@@ -24,6 +24,8 @@ public class Card : MonoBehaviour
 
     private GameObject _manager;
 
+    private int _id;
+
     void Start()
     {
         _state = 1;
@@ -33,7 +35,8 @@ public class Card : MonoBehaviour
     public void setupGraphics()
     {
         _cardBack = _manager.GetComponent<GameManager>().getCardBack();
-        _cardFace = _manager.GetComponent<GameManager>().getCardFace(_cardValue);
+        Debug.Log(_id);
+        _cardFace = _manager.GetComponent<GameManager>().getCardFace(_id);
         _cardEmpty = _manager.GetComponent<GameManager>().getCardEmpty();
 
         flipCard();
@@ -81,6 +84,11 @@ public class Card : MonoBehaviour
     {
         get { return _initialized; }
         set { _initialized = value; }
+    }
+
+    public int ID {
+        get { return _id; }
+        set { _id = value; }
     }
 
     public void falseCheck()
