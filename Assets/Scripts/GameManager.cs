@@ -314,6 +314,7 @@ public class GameManager : MonoBehaviour
             playerOneDeck[i].GetComponent<Card>().flipCard();
             playerTwoDeck[i].GetComponent<Card>().flipCard();
         }
+            WriteTextOnScreen(InGameText.Turn, "Turno de: Jugador " + (turn + 1));
     }
 
     // Plays the normal game, check if sum of the selected cards on the board
