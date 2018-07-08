@@ -35,6 +35,9 @@ public class GameManager : MonoBehaviour
     private bool gameOver = false;
     private int cardNum = 0;
 
+    // Refers to the last Player who took cards from the board
+    private int lastPlay = -1;
+
     // 0 means it's player one turn and 1 means player two turn.
     private int turn;
 
@@ -348,6 +351,7 @@ public class GameManager : MonoBehaviour
                     WriteTextOnScreen(InGameText.PTwoScore, msg);
                 }
                 WriteTextOnScreen(InGameText.Match, "");
+                lastPlay = turn;
                 ChangeTurn();
             }
             else
@@ -400,18 +404,18 @@ public class GameManager : MonoBehaviour
                     selectedCard.GetComponent<Card>().CardValue + 2;
                 GameObject[] deck = (turn == 0) ? playerOneDeck : 
                 playerTwoDeck;
-                bool canCall = false;
+                bool canBuild = false;
                 for (int i = 0; i < 4; i++)
                 {
                     
                     if (deck[i].GetComponent<Card>().CardValue+1 == sum)
                     {
-                        canCall = true;
+                        canBuild = true;
                         break;
                     }
                 }
 
-                if (canCall)
+                if (canBuild)
                 {
                     cards[0].GetComponent<Card>().CardValue = sum-1;
                     cards[0].GetComponent<Card>().Quantity++;
@@ -498,9 +502,9 @@ public class GameManager : MonoBehaviour
                     remainingPoints += 
                         boardDeck[i].GetComponent<Card>().Quantity;
             
-            if (turn == 1) 
+            if (lastPlay == 0) 
                 POneScore += remainingPoints;
-            else if (turn == 0)
+            else if (lastPlay == 1)
                 PTwoScore += remainingPoints;
             
             string winner = "";

@@ -22,7 +22,6 @@ public class Card : MonoBehaviour
     private Sprite _cardEmpty;
     private Sprite _cardSelected;
 
-
     private GameObject _manager;
 
     void Start()
