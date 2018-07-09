@@ -20,6 +20,9 @@ public class GameManager : MonoBehaviour
     private GameObject selectedCard;
     public GameObject endGamePanel;
 
+    public AudioSource[] sound_effects;
+
+
     [SerializeField]
     private Text[] gameTexts;
 
@@ -29,6 +32,8 @@ public class GameManager : MonoBehaviour
     private enum Decks { PlayerOne, PlayerTwo, Board };
     private enum InGameText { Match, POneScore, PTwoScore, RemainingCards,
         Turn, CardValue, Winner };
+
+    private enum Sounds { CardShuffle, CardSelect, Wrong };
 
     private bool _init = false;
     private bool checkForEndGame = false;
@@ -133,6 +138,7 @@ public class GameManager : MonoBehaviour
 
     void FillDeck(Decks option)
     {
+        PlaySound(Sounds.CardShuffle);
         GameObject[] deck = { };
 
         if (option == Decks.PlayerOne)
@@ -301,6 +307,11 @@ public class GameManager : MonoBehaviour
         gameTexts[(int)where].text = msg;
     }
 
+    void PlaySound(Sounds sound) {
+        sound_effects[(int)sound].pitch = Random.Range(0.8f, 1.2f);
+        sound_effects[(int)sound].Play();
+    }
+
     public void ChangeTurn()
     {
         selectedCard = null;
@@ -333,6 +344,7 @@ public class GameManager : MonoBehaviour
         {
             if ((selectedCard.GetComponent<Card>().CardValue + 1) == sum)
             {
+                PlaySound(Sounds.CardSelect);
                 ClearCard(selectedCard);
                 selectedCard = null;
                 int points = 0;
@@ -359,12 +371,14 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                PlaySound(Sounds.Wrong);
                 string msg = "No suman lo mismo";
                 WriteTextOnScreen(InGameText.Match, msg);
             }
         }
         else
         {
+            PlaySound(Sounds.Wrong);
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }
@@ -374,6 +388,7 @@ public class GameManager : MonoBehaviour
     {
         if (selectedCard != null)
         {
+            PlaySound(Sounds.CardSelect);
             int i = 0;
             for (; i < boardDeck.Length; i++)
             {
@@ -393,6 +408,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            PlaySound(Sounds.Wrong);
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }
@@ -421,6 +437,7 @@ public class GameManager : MonoBehaviour
 
                 if (canBuild)
                 {
+                    PlaySound(Sounds.CardSelect);
                     cards[0].GetComponent<Card>().CardValue = sum-1;
                     cards[0].GetComponent<Card>().Quantity++;
                     ClearCard(selectedCard);
@@ -430,16 +447,19 @@ public class GameManager : MonoBehaviour
                     ChangeTurn();
                 } else
                 {
+                    PlaySound(Sounds.Wrong);
                     WriteTextOnScreen(InGameText.Match, "Construccion no posible");
                 }
             }
             else
             {
+                PlaySound(Sounds.Wrong);
                 WriteTextOnScreen(InGameText.Match,
                     "Solo puedes seleccionar una carta del tablero para construir");
             }
         } else
         {
+            PlaySound(Sounds.Wrong);
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }
@@ -465,7 +485,7 @@ public class GameManager : MonoBehaviour
 
                 if (canCall)
                 {
-                    
+                    PlaySound(Sounds.CardSelect);
                     cards[0].GetComponent<Card>().Quantity++;
                     string msg = "Llamando " + (selectedCard.GetComponent<Card>()
                     .CardValue+1);
@@ -475,16 +495,19 @@ public class GameManager : MonoBehaviour
                     ChangeTurn();
                 } else
                 {
+                    PlaySound(Sounds.Wrong);
                     WriteTextOnScreen(InGameText.Match, "Llamada no posible");
                 }
             }
             else
             {
+                PlaySound(Sounds.Wrong);
                 WriteTextOnScreen(InGameText.Match,
                     "Solo puedes seleccionar una carta del tablero para Llamar");
             }
         } else
         {
+            PlaySound(Sounds.Wrong);
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
     }

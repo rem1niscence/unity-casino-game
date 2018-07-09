@@ -9,6 +9,8 @@ public class MenuBehavior : MonoBehaviour {
     public GameObject pauseMenuUI;
     public GameObject tutorialUI;
 
+    public AudioSource buttonClick;
+
     void Update() {
         Scene scene = SceneManager.GetActiveScene();
         if (scene.name == "Level") {
@@ -49,5 +51,9 @@ public class MenuBehavior : MonoBehaviour {
 
     public void LoadMenu() {
         SceneManager.LoadScene("Menu");
+    }
+
+    public void PlayAudio() {
+        buttonClick.Play();
     }
 }
