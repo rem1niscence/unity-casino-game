@@ -275,7 +275,7 @@ public class GameManager : MonoBehaviour
 
     public void ClearCard(GameObject card)
     {
-        card.GetComponent<Card>().CardValue = -1;
+        card.GetComponent<Card>().CardValue = -2;
         card.GetComponent<Card>().Selected = false;
         card.GetComponent<Card>().Initialized = false;
         card.GetComponent<Card>().Quantity = 1;
@@ -388,7 +388,7 @@ public class GameManager : MonoBehaviour
     // Place a selected card on the board
     public void Place()
     {
-        if (selectedCard != null)
+        if (selectedCard != null && selectedCard.GetComponent<Card>().CardValue > -1)
         {
             PlaySound(Sounds.CardSelect);
             int i = 0;
@@ -524,7 +524,7 @@ public class GameManager : MonoBehaviour
             if (playerTwoDeck[i].GetComponent<Card>().CardValue < 0)
                 pOTwoCardsLeft--;
         }
-        if (pOneCardsLeft == 0 && pOTwoCardsLeft == 0) {
+        if (pOneCardsLeft == 0 || pOTwoCardsLeft == 0) {
             int remainingPoints = 0;
             for (int i = 0; i < boardDeck.Length; i++) 
                 if (boardDeck[i].GetComponent<Card>().Initialized)
