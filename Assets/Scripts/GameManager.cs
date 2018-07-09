@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     private enum InGameText { Match, POneScore, PTwoScore, RemainingCards,
         Turn, CardValue, Winner };
 
-    private enum Sounds { CardShuffle, CardSelect, Wrong };
+    private enum Sounds { CardShuffle, CardSelect, Wrong, Click };
 
     private bool _init = false;
     private bool checkForEndGame = false;
@@ -194,6 +194,7 @@ public class GameManager : MonoBehaviour
 
     public void SelectPlayerCard(string data)
     {
+        PlaySound(Sounds.Click);
         // If player == 0 then it's player One consecu and 
         // accordingly if player == 1 then it's player two.
         int player = data[0] - '0';
@@ -247,6 +248,7 @@ public class GameManager : MonoBehaviour
 
     public void SelectBoardCard(int index)
     {
+        PlaySound(Sounds.Click);
         GameObject card = boardDeck[index];
         bool isSelected = card.GetComponent<Card>().Selected;
         isSelected = !isSelected;
