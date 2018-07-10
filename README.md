@@ -15,5 +15,7 @@ their own cards.
 # Screenshots
 
 ## Menu
+![alt-text](https://github.com/justaname94/unity-casino-game/blob/master/Media/Menu.jpg?raw=true "Menu")
 
 ## In-Game screen
+![alt-text](https://github.com/justaname94/unity-casino-game/blob/master/Media/game_screen.jpg?raw=true "In-Game screen")
