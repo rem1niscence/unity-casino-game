@@ -355,18 +355,25 @@ public class GameManager : MonoBehaviour
                     points += card.GetComponent<Card>().Quantity;
                     ClearCard(card);
                 }
-                if (turn == 0)
-                {
-                    POneScore += points;
-                    string msg = "Jugad@r 1: " + POneScore + " puntos";
+
+                object score = null;
+                string msg = "";
+                if (turn == 0) {
+                    score = POneScore;
+                    msg = "Jugad@r 1: ";
+                }
+                else if (turn == 1) {
+                    score = PTwoScore;
+                    msg = "Jugad@r 2: ";
+                }
+                score = (int)score + points;    
+                msg += (int)score + " puntos";
+
+                if (turn == 0) 
                     WriteTextOnScreen(InGameText.POneScore, msg);
-                }
                 else if (turn == 1)
-                {
-                    PTwoScore += points;
-                    string msg = "Jugad@r 2: " + PTwoScore + " puntos";
                     WriteTextOnScreen(InGameText.PTwoScore, msg);
-                }
+
                 WriteTextOnScreen(InGameText.Match, "");
                 lastPlay = turn;
                 ChangeTurn();
@@ -417,89 +424,69 @@ public class GameManager : MonoBehaviour
 
     public void BuildComb()
     {
-        List<GameObject> cards = SelectedCards;
-        if (selectedCard != null)
-        {
-            if (cards.Count == 1)
+        bool canComb = CanCombine();
+        if (canComb) {
+            List<GameObject> cards = SelectedCards;
+            int sum = cards[0].GetComponent<Card>().CardValue +
+                selectedCard.GetComponent<Card>().CardValue + 2;
+            GameObject[] deck = (turn == 0) ? playerOneDeck : 
+            playerTwoDeck;
+            bool canBuild = false;
+            for (int i = 0; i < 4; i++)
             {
-                int sum = cards[0].GetComponent<Card>().CardValue +
-                    selectedCard.GetComponent<Card>().CardValue + 2;
-                GameObject[] deck = (turn == 0) ? playerOneDeck : 
-                playerTwoDeck;
-                bool canBuild = false;
-                for (int i = 0; i < 4; i++)
+                
+                if (deck[i].GetComponent<Card>().CardValue+1 == sum)
                 {
-                    
-                    if (deck[i].GetComponent<Card>().CardValue+1 == sum)
-                    {
-                        canBuild = true;
-                        break;
-                    }
-                }
-
-                if (canBuild)
-                {
-                    PlaySound(Sounds.CardSelect);
-                    cards[0].GetComponent<Card>().CardValue = sum-1;
-                    cards[0].GetComponent<Card>().Quantity++;
-                    ClearCard(selectedCard);
-                    selectedCard = null;
-                    string msg = "Contruyendo " + sum;
-                    WriteTextOnScreen(InGameText.Match, msg);
-                    ChangeTurn();
-                } else
-                {
-                    PlaySound(Sounds.Wrong);
-                    WriteTextOnScreen(InGameText.Match, "Construccion no posible");
+                    canBuild = true;
+                    break;
                 }
             }
-            else
+            if (canBuild)
+            {
+                MakeComb(cards, "build", sum);
+            } else
             {
                 PlaySound(Sounds.Wrong);
-                WriteTextOnScreen(InGameText.Match,
-                    "Solo puedes seleccionar una carta del tablero para construir");
+                WriteTextOnScreen(InGameText.Match, "Construccion no posible");
             }
-        } else
-        {
-            PlaySound(Sounds.Wrong);
-            WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
+        
     }
 
     public void CallComb() {
+        bool canComb = CanCombine();
+        if (canComb) {
+            List<GameObject> cards = SelectedCards;
+            GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
+            bool canCall = false;
+            for (int i = 0; i < 4; i++)
+            {
+                if (deck[i].GetComponent<Card>().CardValue == 
+                cards[0].GetComponent<Card>().CardValue)
+                {
+                    canCall = true;
+                    break;
+                }
+            }
+            if (canCall)
+            {
+                MakeComb(cards);
+            } else
+            {
+                PlaySound(Sounds.Wrong);
+                WriteTextOnScreen(InGameText.Match, "Llamada no posible");
+            }
+        }
+    }
+
+    bool CanCombine() {
+        bool canComb = false;
         List<GameObject> cards = SelectedCards;
         if (selectedCard != null)
         {
             if (cards.Count == 1)
             {
-                GameObject[] deck = (turn == 0) ? playerOneDeck : playerTwoDeck;
-                bool canCall = false;
-                for (int i = 0; i < 4; i++)
-                {
-                    
-                    if (deck[i].GetComponent<Card>().CardValue == 
-                    cards[0].GetComponent<Card>().CardValue)
-                    {
-                        canCall = true;
-                        break;
-                    }
-                }
-
-                if (canCall)
-                {
-                    PlaySound(Sounds.CardSelect);
-                    cards[0].GetComponent<Card>().Quantity++;
-                    string msg = "Llamando " + (selectedCard.GetComponent<Card>()
-                    .CardValue+1);
-                    WriteTextOnScreen(InGameText.Match, msg);
-                    ClearCard(selectedCard);
-                    selectedCard = null;
-                    ChangeTurn();
-                } else
-                {
-                    PlaySound(Sounds.Wrong);
-                    WriteTextOnScreen(InGameText.Match, "Llamada no posible");
-                }
+                canComb = true;
             }
             else
             {
@@ -512,6 +499,21 @@ public class GameManager : MonoBehaviour
             PlaySound(Sounds.Wrong);
             WriteTextOnScreen(InGameText.Match, "Selecciona una carta");
         }
+
+        return canComb;
+    }
+
+    void MakeComb(List<GameObject> cards, string typeComb = "", int sum = 0) {
+        PlaySound(Sounds.CardSelect);
+        if (typeComb == "build")
+            cards[0].GetComponent<Card>().CardValue = sum-1;            
+        cards[0].GetComponent<Card>().Quantity++;
+        string msg = "Llamando " + (selectedCard.GetComponent<Card>()
+        .CardValue+1);
+        WriteTextOnScreen(InGameText.Match, msg);
+        ClearCard(selectedCard);
+        selectedCard = null;
+        ChangeTurn();
     }
 
     void EndGame() {
